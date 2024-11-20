@@ -1,46 +1,57 @@
-# CB-radio-Cybernet-platform-PLL-controller
+### **Controlador PLL CB para plataforma Cybernet**  
 
-This design allows a CB radio with 40 channels to be fitted with a rotary encoder and a 0.96" OLED display to browse through the channels, in channel mode or frequency mode, or scan the channels. It adds extra channels below and above the regular channels.
-It is designed for typical 70'-80's Cybernet chassis radios, in my case a Super Panther.
+Este projeto permite equipar um rádio CB com 40 canais com um codificador rotativo e um display OLED de 0,96" para navegar pelos canais no modo de canal, modo de frequência ou realizar a varredura dos canais. Ele adiciona canais extras acima e abaixo dos canais regulares. Foi projetado para rádios típicos com chassis Cybernet das décadas de 70 e 80, no meu caso um **Super Panther**.  
 
-Although the radio has 40 channels, the PLL used, the famous PLL02A, can handle 512 channels but the actual range of the radio itself is limited by the range of it's VCO (Voltage Controlled Oscillator). My usable range with the controller is -40 to +90 or 130 channels.
-In the glory years of CB many had their 40 radio channels extended by adding switches for so called high, super-high, low and super-low channels.
-In that period i was active in the CB scene and did a lot of modifications for fellow CBers.
+Embora o rádio tenha 40 canais, o PLL utilizado, o famoso **PLL02A**, pode lidar com até **512 canais**, mas o intervalo real depende do alcance do **VCO (Oscilador Controlado por Tensão)** do rádio. No meu caso, o intervalo utilizável com o controlador é de -40 a +90 (130 canais). Nos anos de ouro do CB, muitos rádios com 40 canais foram modificados com chaves para incluir canais "high", "super-high", "low" e "super-low". Naquela época, eu era ativo na cena CB e realizava muitas modificações para outros usuários.  
 
-Around 1981 i designed a scanner add-on for CB, i sold the design to a small CB shop and they built and sold them, it was very basic but gave the user 127 channels and the scanning feature.
-I did do a new design a few years later with more features such as fast and slow forward / reverse buttons but that was for personal use. By the late 80's CB disappeared and i sold my radios.
-For a while i wanted a cheap project radio to again add a scanner but with modern technology, and then a friend gave me this beat up Super Panther.
+Em torno de 1981, projetei um scanner para CB e vendi o design para uma pequena loja de CB, que construiu e vendeu a solução. Era básico, mas oferecia 127 canais e a funcionalidade de varredura. Alguns anos depois, criei um novo design com mais recursos, como botões para avançar/retroceder rapidamente, mas era para uso pessoal. No final dos anos 80, o CB desapareceu e vendi meus rádios. Recentemente, quis criar um projeto barato para adicionar novamente um scanner com tecnologia moderna, e um amigo me deu um **Super Panther** em mau estado.  
 
-Disclaimer: additional to the standard license, no commercial usage is allowed, otherwise feel free to use the design and code and build your own version.
-Provided as-is, no warranty or liability, use at your own risk. There is not really a risk voiding the warranty on your radio since this is intended for radios of the 70s and 80's. You might want to check if modifying the radio is within the legal bounds of your country's laws on CB radio. A decent level of knowledge on electronics and/or CB radios is assumed, do not attempt to build this if you do not have the proper skills otherwise you will get stuck soldering the port expander or even worse, blow up your radio. You can ask me for info but i can't provide details for use in other CB radios, I have no commercial interests, I do not sell kits.
+---
 
-That's the background for the design, it uses an ESP32-S3 mini zero, one of the smallest computer boards but very powerful.
-Programming is done on the Arduino IDE platform, i use version 1.xx because it can work in portable mode, this allows the project to be "frozen" with the current drivers because drivers are updated all the time and breaking changes happen, i recommend using portable mode.
+### **Aviso Legal**  
+Além da licença padrão, **uso comercial não é permitido**. No entanto, sinta-se à vontade para usar o design e o código para construir sua própria versão. O projeto é fornecido "como está", sem garantia ou responsabilidade, e o uso é por sua conta e risco. Não há risco real de invalidar a garantia do rádio, já que este projeto se destina a rádios das décadas de 70 e 80. Verifique se a modificação do rádio é legal no seu país.  
 
-Source code is included.
-Many font files are packed with it, not all are used but allow customization.
-A lot is documented in the code comments.
-An array is used to translate channels and frequencies, if you look at a frequency table for a CB radio you will notice a few deliberate gaps (Alpha channels) and some jumps (mixed up in frequency) and in case of negative channels, it's all reversed. I followed the sequences from a Ham International Jumbo 3.
+É necessário um **bom nível de conhecimento em eletrônica e/ou rádios CB** para realizar este projeto. **Não tente construir este controlador sem as habilidades adequadas**, pois você pode ter dificuldades ao soldar o expansor de portas ou, pior, danificar seu rádio.  
 
-The schematic and gerber files are included.
-We are connecting 9 pins to the PLL for frequency selection plus a lock detect signal, further a connection to the squelch circuit.
-The ESP does not have enough pins exposed therefor we use a port expander MCP23017 which is connected via the I2C interface bus.
-The PLL of the radio works on 5V levels, the ESP32 on 3.3V, the port expander runs on 5V so it can connect directly to the PLL. The I2C port has level shifters on the SDA and SCL lines.
-Since the ESP is in a socket we use the space below it to place components.
-A transistor is placed in parallel to the transistor in the squelch circuit and has an open collector configuration to 3.3V so it can be coupled directly to the ESP.
-The power supply to the OLED display is filtered by an CRC network.
+---
 
-The controller needs a 5V supply, it's not on the board, i used a 7805 regulator with decoupling caps, although not very efficient current is low and the noise level is lower than a buck converter. Make sure to insulate it from the chassis because that's a different ground.
+### **Design e Funcionalidades**
+O controlador usa uma **ESP32-S3 Mini Zero**, uma das menores placas computacionais, mas muito poderosa.  
 
-Soldering the MCP is not for beginners, use plenty of flux and a special tip (hollowed out tip like Plato's SMD flow tip or Pace wave or mini wave tip).
+- **Plataforma de Desenvolvimento**:  
+  O projeto é programado no **Arduino IDE** (recomendo a versão 1.xx em modo portátil). Isso permite "congelar" o ambiente com os drivers atuais, evitando problemas causados por atualizações que possam quebrar a compatibilidade.  
 
-Programming instructions are included, it will guide you through the installation of the development environment and to program the ESP32-S3 with the source code.
+- **Código-Fonte**:  
+  Inclui o código-fonte e vários arquivos de fontes (não todas são usadas, permitindo personalização). Muito está documentado nos comentários do código. Um array é usado para traduzir canais e frequências, respeitando lacunas (canais Alpha) e saltos misturados na tabela de frequências.  
 
-Mounting instructions are included for one type of Cybernet chassis, a very typical and widely used chassis.
+- **Hardware**:  
+  - O controlador conecta 9 pinos ao PLL para seleção de frequência, além de um sinal de detecção de bloqueio e uma conexão ao circuito de squelch.  
+  - Como a ESP não tem pinos suficientes, é usado um **expansor de portas MCP23017**, conectado via barramento I2C.  
+  - O PLL opera com níveis de 5V, enquanto a ESP usa 3,3V. O expansor funciona a 5V e se conecta diretamente ao PLL. O barramento I2C tem shifters de nível nas linhas SDA e SCL.  
+  - Um transistor é usado em paralelo ao circuito de squelch e configurado para coletor aberto a 3,3V, permitindo a conexão direta à ESP.  
+  - A alimentação do display OLED é filtrada por uma rede CRC.  
 
-A basic user guide is included.
+- **Fonte de Alimentação**:  
+  O controlador requer uma alimentação de 5V. Usei um regulador **7805** com capacitores de desacoplamento. Embora não seja eficiente, o consumo de corrente é baixo e o nível de ruído é menor do que um conversor buck. Certifique-se de isolá-lo do chassi, pois este tem um terra diferente.  
 
-I put a movie about this on Youtube: https://youtu.be/u1AFa6-rFkU
+- **Montagem do MCP**:  
+  Soldar o MCP não é para iniciantes. Use bastante fluxo e uma ponta especial (como ponta oca estilo **Plato SMD flow tip**, **Pace wave** ou **mini wave tip**).  
 
-Also check out my other repository with the FM modulator/demodulator add-on.
+---
 
+### **Materiais Fornecidos**  
+- **Código-fonte**: Inclui comentários detalhados e opções de personalização.  
+- **Esquema e arquivos Gerber**: Para produção da PCB.  
+- **Instruções de Programação**: Guia para instalação do ambiente de desenvolvimento e programação da ESP32-S3.  
+- **Instruções de Montagem**: Específicas para um tipo de chassis Cybernet amplamente utilizado.  
+- **Guia Básico do Usuário**: Explica como operar o controlador.  
+
+---
+
+### **Vídeo no YouTube**  
+Assista ao vídeo do projeto: [https://youtu.be/u1AFa6-rFkU](https://youtu.be/u1AFa6-rFkU)  
+
+---
+
+### **Repositório Adicional**  
+Confira também meu repositório com o **modulador/demodulador FM**.

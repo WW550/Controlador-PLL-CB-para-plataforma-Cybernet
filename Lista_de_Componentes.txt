@@ -1,0 +1,21 @@
+PCB components:
+
+    10uF 16V Aluminum Electrolytic capacitor x2
+    MCP23017-E/SS IC x1
+    ESP32-S3-Zero ESP32 board x1
+    Tenstar Encoder (round board) x1
+    0.96 Inch OLED SSD1306 (White) 12C x1
+    100 ohm carbon film resistor x1
+    100nF 0603 SMD Chip Multilayer Ceramic Capacitor x2
+    1% 1206 SMD resistor 10K x5
+    BSS138 SMD Field Effect Transistor x2
+    BC847C SMD SOT 1G x1
+
+Additional components:
+
+    LM7805 voltage reg. x1
+    10uF 35V Electrolytic cap x1
+    1uF ceramic cap x1
+    Header pins (row) x1
+    Long header pins 15mm (row) x1
+
